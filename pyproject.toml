@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "bank-marketing-classification"
+version = "0.1.0"
+description = ""
+authors = ["Silas Genário <sg.lopes26@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+jupyter = "^1.0.0"
+pandas = "^1.4.3"
+numpy = "^1.23.1"
+sklearn = "^0.0"
+seaborn = "^0.11.2"
+matplotlib = "^3.5.2"
+plotly = "^5.9.0"
+altair = "^4.2.0"
+category-encoders = "^2.5.0"
+joblib = "^1.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
