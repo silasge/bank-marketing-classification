@@ -14,10 +14,10 @@ def unzip_data(zip_file: str, member: str, to_path: str):
     return member_data.name
 
 
-if __name__ == "__main__":
+def start():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--zip_file", type=str, dest="zip_file")
-    parser.add_argument("--member", type=str, dest="member")
-    parser.add_argument("--to_path", type=str, dest="to_path")
+    parser.add_argument("zip_file", type=str)
+    parser.add_argument("member", type=str)
+    parser.add_argument("to_path", type=str)
     args = parser.parse_args()
     unzip_data(zip_file=args.zip_file, member=args.member, to_path=args.to_path)

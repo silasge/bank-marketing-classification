@@ -20,6 +20,12 @@ joblib = "^1.1.0"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
+[tool.poetry.scripts]
+download_data = "bank_marketing_classification.data.download_data:start"
+unzip_data = "bank_marketing_classification.data.unzip_data:start"
+split_data = "bank_marketing_classification.data.split_data:start"
+train_models = "bank_marketing_classification.models.train_models:start"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

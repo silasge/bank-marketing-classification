@@ -1,63 +1,56 @@
+# Data URL
 BANK_MARKETING_URL = https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank-additional.zip
+
+# Diretórios 
 EXTERNAL_DATA_PATH = ./data/external
 RAW_DATA_PATH = ./data/raw
 INTERIM_PATH = ./data/interim
 REFERENCES_PATH = ./references
 MODELS_PATH = ./models
-SRC_PATH = ./bank_marketing_classification
-N_ITER = 20
-CV = 5
+
+# Parâmetros
 TEST_SIZE = 0.25
+RANDOM_STATE = 42
+CV = 5
+N_ITER = 20
+SCORING = roc_auc
 
-.PHONY: virtual_env
+# Modelos
 
-all: $(MODELS_PATH)/lr.pkl \
-$(MODELS_PATH)/svc.pkl \
-$(MODELS_PATH)/dt.pkl \
-$(MODELS_PATH)/rf.pkl \
-$(MODELS_PATH)/gb.pkl
+MODELS = $(MODELS_PATH)/lr.pkl $(MODELS_PATH)/svc.pkl $(MODELS_PATH)/dt.pkl $(MODELS_PATH)/rf.pkl
 
-virtual_env: 
-	@echo ">>> Ativando o ambiente virtual..."
-	. $(.venv/Scripts)/activate.ps1
 
+all: $(MODELS)
+	
 $(EXTERNAL_DATA_PATH)/bank-additional.zip:
 	@echo ">>> Baixando bank-additional.zip em $(EXTERNAL_DATA_PATH)"
-	python $(SRC_PATH)/data/download_data.py --url $(BANK_MARKETING_URL) \
-	                                         --to_path $(EXTERNAL_DATA_PATH)
+	poetry run download_data $(BANK_MARKETING_URL) $(EXTERNAL_DATA_PATH)
+
 
 $(RAW_DATA_PATH)/bank-additional-full.csv: $(EXTERNAL_DATA_PATH)/bank-additional.zip
 	@echo ">>> Extraindo bank-additional-full.csv em $(RAW_DATA_PATH)..."
-	python $(SRC_PATH)/data/unzip_data.py --zip_file $< \
-	                                      --member bank-additional/bank-additional-full.csv \
-										  --to_path $(RAW_DATA_PATH)
+	poetry run unzip_data $< bank-additional/bank-additional-full.csv $(RAW_DATA_PATH)
 
 $(REFERENCES_PATH)/bank-additional-names.txt: $(EXTERNAL_DATA_PATH)/bank-additional.zip
 	@echo ">>> Extraindo bank-additional-names.txt em $(REFERENCES_PATH)..."
-	python $(SRC_PATH)/data/unzip_data.py --zip_file $< \
-	                                      --member bank-additional/bank-additional-names.txt \
-										  --to_path $(REFERENCES_PATH)
+	poetry run unzip_data $< bank-additional/bank-additional-names.txt $(REFERENCES_PATH)
 
-$(INTERIM_PATH)/bank_train.csv \
-$(INTERIM_PATH)/bank_teste.csv: $(RAW_DATA_PATH)/bank-additional-full.csv
-	@echo ">>> Salvando conjunto de treinamento..."
-	python $(SRC_PATH)/data/split_data.py --csv_file $< 
-										  --test_size $(TEST_SIZE)
-										  --save_to $@
+train_test_split: $(RAW_DATA_PATH)/bank-additional-full.csv
+	@echo ">>> Dividindo conjunto de treinamento e teste em $(INTERIM_PATH)"
+	poetry run split_data $< \
+	                      $(INTERIM_PATH) \
+	                      --test_size $(TEST_SIZE) \
+						  --random_state $(RANDOM_STATE)
 
-$(MODELS_PATH)/lr.pkl \
-$(MODELS_PATH)/svc.pkl \
-$(MODELS_PATH)/dt.pkl \
-$(MODELS_PATH)/rf.pkl \
-$(MODELS_PATH)/gb.pkl: $(INTERIM_PATH)/bank_train.csv
+$(MODELS): train_test_split
 	@echo Treinando modelo $(notdir $(basename $@))
-	python $(SRC_PATH)/models/train_models.py --train_data $< \
-	                                          --model $(notdir $(basename $@)) \
-											  --save_to $@ \
-											  --cv $(CV) \
-											  --n_iter $(N_ITER)
+	poetry run train_models $(INTERIM_PATH)/bank_train.csv \
+	                        $(notdir $(basename $@)) \
+							$@ \
+							--cv $(CV) \
+							--scoring $(SCORING) \
+							--n_iter $(N_ITER) \
+							--random_state $(RANDOM_STATE)
 
-
-
-
-
+clean:
+	rm $(MODELS)
