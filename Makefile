@@ -1,4 +1,6 @@
-all: download unzip train_test_split train
+all: predict
+
+.PHONY: clean_downloads clean_splits clean_models clean_altair black predict
 
 # Data URL
 BANK_MARKETING_URL = https://archive.ics.uci.edu/ml/machine-learning-databases/00222/bank-additional.zip
@@ -6,7 +8,8 @@ BANK_MARKETING_URL = https://archive.ics.uci.edu/ml/machine-learning-databases/0
 # Diretórios 
 EXTERNAL_DATA_PATH = ./data/external
 RAW_DATA_PATH = ./data/raw
-INTERIM_PATH = ./data/interim
+SPLITS_DATA_PATH = ./data/splits
+PREDICTIONS_DATA_PATH = ./data/predictions
 REFERENCES_PATH = ./references
 MODELS_PATH = ./models
 SRC_PATH = ./bank_marketing_classification
@@ -19,15 +22,11 @@ TEST_SIZE = 0.25
 RANDOM_STATE = 42
 CV = 5
 N_ITER = 50
-SCORING = roc_auc
+THRESHOLD = 0.4
 
 # Modelos
 
 MODELS = $(MODELS_PATH)/lr.pkl $(MODELS_PATH)/svc.pkl $(MODELS_PATH)/dt.pkl $(MODELS_PATH)/rf.pkl
-
-download: $(EXTERNAL_DATA_PATH)/bank-additional.zip
-unzip: $(RAW_DATA_PATH)/bank-additional-full.csv $(REFERENCES_PATH)/bank-additional-names.txt
-train: $(MODELS)
 	
 $(EXTERNAL_DATA_PATH)/bank-additional.zip: $(SRC_PATH)/download_data.py
 	$(POETRY_RUN) $< $(BANK_MARKETING_URL) $(EXTERNAL_DATA_PATH)
@@ -38,20 +37,50 @@ $(RAW_DATA_PATH)/bank-additional-full.csv: $(SRC_PATH)/unzip_data.py $(EXTERNAL_
 $(REFERENCES_PATH)/bank-additional-names.txt: $(SRC_PATH)/unzip_data.py $(EXTERNAL_DATA_PATH)/bank-additional.zip
 	$(POETRY_RUN) $< $(word 2, $^) bank-additional/bank-additional-names.txt $(REFERENCES_PATH)
 
-train_test_split: $(SRC_PATH)/split_data.py $(RAW_DATA_PATH)/bank-additional-full.csv
+$(SPLITS_DATA_PATH)/bank_train.csv $(SPLITS_DATA_PATH)/bank_test.csv &: $(SRC_PATH)/split_data.py $(RAW_DATA_PATH)/bank-additional-full.csv
 	$(POETRY_RUN) $< $(word 2, $^) \
-	                 $(INTERIM_PATH) \
+	                 $(SPLITS_DATA_PATH) \
 	                 --test_size $(TEST_SIZE) \
 					 --random_state $(RANDOM_STATE)
 
-$(MODELS): $(SRC_PATH)/train_models.py $(INTERIM_PATH)/bank_train.csv
+$(MODELS): $(SRC_PATH)/train_models.py $(SPLITS_DATA_PATH)/bank_train.csv
 	$(POETRY_RUN) $< $(word 2, $^) \
 	                 $(notdir $(basename $@)) \
 					 $@ \
 					 --cv $(CV) \
-					 --scoring $(SCORING) \
+					 --scoring roc_auc \
 					 --n_iter $(N_ITER) \
 					 --random_state $(RANDOM_STATE)
 
-clean:
+$(PREDICTIONS_DATA_PATH)/bank_test_predictions.csv: $(SRC_PATH)/make_predictions.py $(SPLITS_DATA_PATH)/bank_test.csv $(MODELS)
+	$(POETRY_RUN) $< --test_set $(word 2, $^) \
+	                 --threshold $(THRESHOLD) \
+	                 --models $(MODELS) \
+					 --save_to $(dir $@)
+
+download: $(EXTERNAL_DATA_PATH)/bank-additional.zip
+unzip: $(RAW_DATA_PATH)/bank-additional-full.csv
+references: $(REFERENCES_PATH)/bank-additional-names.txt
+split: $(SPLITS_DATA_PATH)/bank_train.csv $(SPLITS_DATA_PATH)/bank_test.csv
+models: $(MODELS)
+predict: $(PREDICTIONS_DATA_PATH)/bank_test_predictions.csv
+
+clean_downloads:
+	rm $(EXTERNAL_DATA_PATH)/*.zip 
+	rm $(RAW_DATA_PATH)/*.csv 
+	rm $(REFERENCES_PATH)/*.txt
+
+clean_splits:
+	rm $(SPLITS_DATA_PATH)/*.csv
+
+clean_models:
 	rm $(MODELS)
+
+clean_predictions:
+	rm $(PREDICTIONS_DATA_PATH)/*.csv
+
+clean_altair:
+	rm notebooks/*.json
+
+black:
+	poetry run black ./bank_marketing_classification

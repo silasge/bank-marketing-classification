@@ -2,13 +2,12 @@ import argparse
 from typing import Optional
 
 import joblib
-from loguru import logger
 import pandas as pd
-from sklearn import model_selection
-from sklearn import pipeline
+from loguru import logger
+from sklearn import model_selection, pipeline
 
-from bank_marketing_classification import models
-from bank_marketing_classification import feature_engineering
+from bank_marketing_classification.models import models
+from bank_marketing_classification.preprocessing import feature_engineering
 
 
 def train_model(
@@ -56,10 +55,10 @@ if __name__ == "__main__":
     parser.add_argument("train_data", type=str)
     parser.add_argument("model", type=str)
     parser.add_argument("save_to", type=str)
-    parser.add_argument("--cv", type=int, default=5, dest="cv")
-    parser.add_argument("--scoring", type=str, default="roc_auc", dest="scoring")
-    parser.add_argument("--n_iter", type=int, default=20, dest="n_iter")
-    parser.add_argument("--random_state", type=int, default=42, dest="random_state")
+    parser.add_argument("--cv", type=int, default=5)
+    parser.add_argument("--scoring", type=str, default="roc_auc")
+    parser.add_argument("--n_iter", type=int, default=20)
+    parser.add_argument("--random_state", type=int, default=42)
     args = parser.parse_args()
     logger.info(f"Treinando modelo {args.model}.")
     train_model(

@@ -1,6 +1,7 @@
 import category_encoders as ce
 from sklearn.base import BaseEstimator, TransformerMixin
 
+
 class GetEncoders(BaseEstimator, TransformerMixin):
     def __init__(self, transformer="one_hot_encoder", smoothing=1, sigma=0.05):
         self.transformer = transformer

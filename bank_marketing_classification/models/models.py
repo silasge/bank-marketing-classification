@@ -1,9 +1,6 @@
 import numpy as np
 from scipy.stats import uniform
-from sklearn import ensemble
-from sklearn import linear_model
-from sklearn import svm
-from sklearn import tree
+from sklearn import ensemble, linear_model, svm, tree
 
 
 def get_model(model: str, random_state: int = 42):
@@ -22,10 +19,18 @@ def get_model(model: str, random_state: int = 42):
                 "transf_features__te_job__sigma": uniform(loc=0, scale=1),
                 "transf_features__bin_campaign__n_bins": [3, 4, 5],
                 "transf_features__bin_campaign__encode": ["onehot", "ordinal"],
-                "transf_features__bin_campaign__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_campaign__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "transf_features__bin_previous__n_bins": [3, 4, 5],
                 "transf_features__bin_previous__encode": ["onehot", "ordinal"],
-                "transf_features__bin_previous__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_previous__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "clf__penalty": ["l1", "l2", "elasticnet", "none"],
                 "clf__C": uniform(loc=0, scale=10),
                 "clf__l1_ratio": uniform(
@@ -47,10 +52,18 @@ def get_model(model: str, random_state: int = 42):
                 "transf_features__te_job__sigma": uniform(loc=0, scale=1),
                 "transf_features__bin_campaign__n_bins": [3, 4, 5],
                 "transf_features__bin_campaign__encode": ["onehot", "ordinal"],
-                "transf_features__bin_campaign__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_campaign__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "transf_features__bin_previous__n_bins": [3, 4, 5],
                 "transf_features__bin_previous__encode": ["onehot", "ordinal"],
-                "transf_features__bin_previous__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_previous__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "clf__C": uniform(loc=0, scale=1),
                 "clf__loss": ["hinge", "squared_hinge"],
             },
@@ -69,10 +82,18 @@ def get_model(model: str, random_state: int = 42):
                 "transf_features__te_job__sigma": uniform(loc=0, scale=1),
                 "transf_features__bin_campaign__n_bins": [3, 4, 5],
                 "transf_features__bin_campaign__encode": ["onehot", "ordinal"],
-                "transf_features__bin_campaign__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_campaign__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "transf_features__bin_previous__n_bins": [3, 4, 5],
                 "transf_features__bin_previous__encode": ["onehot", "ordinal"],
-                "transf_features__bin_previous__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_previous__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "clf__min_samples_split": uniform(loc=0, scale=0.1),
                 "clf__min_samples_leaf": uniform(loc=0, scale=0.02),
             },
@@ -91,17 +112,25 @@ def get_model(model: str, random_state: int = 42):
                 "transf_features__te_job__sigma": uniform(loc=0, scale=1),
                 "transf_features__bin_campaign__n_bins": [3, 4, 5],
                 "transf_features__bin_campaign__encode": ["onehot", "ordinal"],
-                "transf_features__bin_campaign__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_campaign__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "transf_features__bin_previous__n_bins": [3, 4, 5],
                 "transf_features__bin_previous__encode": ["onehot", "ordinal"],
-                "transf_features__bin_previous__strategy": ["uniform", "quantile", "kmeans"],
+                "transf_features__bin_previous__strategy": [
+                    "uniform",
+                    "quantile",
+                    "kmeans",
+                ],
                 "clf__n_estimators": [50, 100, 200, 300],
                 "clf__min_samples_split": uniform(loc=0, scale=0.1),
                 "clf__min_samples_leaf": uniform(loc=0, scale=0.02),
                 "clf__max_depth": np.arange(5, 11),
                 "clf__max_features": uniform(loc=0.5, scale=1),
-                "clf__class_weight": ["balanced", "balanced_subsample"]
-            },               
+                "clf__class_weight": ["balanced", "balanced_subsample"],
+            },
         },
     }
 

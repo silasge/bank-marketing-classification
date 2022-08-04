@@ -1,11 +1,7 @@
 import category_encoders as ce
 import numpy as np
-from sklearn import compose
-from sklearn import decomposition
-from sklearn import pipeline
-from sklearn import preprocessing
-
-from bank_marketing_classification import custom_preproc
+from bank_marketing_classification.preprocessing import custom_preproc
+from sklearn import compose, decomposition, pipeline, preprocessing
 
 ordinalencoder_mapping = [
     {
@@ -51,8 +47,10 @@ pipe_pca = pipeline.Pipeline(
     ]
 )
 
+
 def _bin_age(x):
     return np.select([(x < 30), (x >= 30) & (x < 60), (x >= 60)], [1, 2, 3])
+
 
 transform_features = compose.ColumnTransformer(
     [
@@ -73,7 +71,11 @@ transform_features = compose.ColumnTransformer(
         ("bin_campaign", preprocessing.KBinsDiscretizer(), ["campaign"]),
         ("bin_previous", preprocessing.KBinsDiscretizer(), ["previous"]),
         ("pca_econ_vars", pipe_pca, ["emp.var.rate", "nr.employed", "euribor3m"]),
-        ("std_idx", preprocessing.StandardScaler(), ["cons.price.idx", "cons.conf.idx"]),
+        (
+            "std_idx",
+            preprocessing.StandardScaler(),
+            ["cons.price.idx", "cons.conf.idx"],
+        ),
     ]
 )
 

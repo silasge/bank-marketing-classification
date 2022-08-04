@@ -3,8 +3,8 @@ import os
 from typing import Optional
 
 import pandas as pd
-from sklearn import model_selection
 from loguru import logger
+from sklearn import model_selection
 
 
 def split_data(
@@ -27,8 +27,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("csv_file", type=str)
     parser.add_argument("save_to", type=str)
-    parser.add_argument("--test_size", type=float, default=0.25, dest="test_size")
-    parser.add_argument("--random_state", type=int, default=42, dest="random_state")
+    parser.add_argument("--test_size", type=float, default=0.25)
+    parser.add_argument("--random_state", type=int, default=42)
     args = parser.parse_args()
     logger.info(
         f"Dividindo dados em conjunto de treinamento e teste em {args.save_to}."
