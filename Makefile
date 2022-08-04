@@ -1,4 +1,4 @@
-all: predict
+all: references predict
 
 .PHONY: clean_downloads clean_splits clean_models clean_altair black predict
 
@@ -25,9 +25,9 @@ N_ITER = 50
 THRESHOLD = 0.4
 
 # Modelos
-
 MODELS = $(MODELS_PATH)/lr.pkl $(MODELS_PATH)/svc.pkl $(MODELS_PATH)/dt.pkl $(MODELS_PATH)/rf.pkl
-	
+
+# Targets
 $(EXTERNAL_DATA_PATH)/bank-additional.zip: $(SRC_PATH)/download_data.py
 	$(POETRY_RUN) $< $(BANK_MARKETING_URL) $(EXTERNAL_DATA_PATH)
 
