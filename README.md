@@ -6,13 +6,21 @@ Neste repositório farei uma aplicação da ciência de dados na área de market
 
 # Dataset
 
-Os dados são retirados da [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) e é composta de 21 variáveis contendo atributos sobre o cliente, sobre a campanha e sobre o contexto sócio-econômico. A lista completa de variáveis e suas descrições pode ser encontrada em [*references*](references/bank-additional-names.txt).
+Os dados são retirados da [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing) e são compostos de 21 variáveis contendo atributos sobre o cliente, sobre a campanha e sobre o contexto sócio-econômico. A lista completa de variáveis e suas descrições pode ser encontrada em [*references*](references/bank-additional-names.txt).
+
+# Tecnologias
+
+A aplicação foi toda feita em Python, utilizando o Poetry para gerenciar as dependências e o GNU Make para gerenciar toda a pipeline de leitura, processamento dos dados, treinamento e avaliação dos modelos.
+
+A leitura e manipulação dos dados foram feitas com o Pandas e Numpy. As visualizações dos dados eu utilizei o Altair, uma ferramenta que lembra bastante o ggplot2 do R e aproveitei esse pequeno projeto para aprendê-lo. Os notebooks são, como de costume, feitos com Jupyter Notebooks.
+
+Apliquei quatro modelos nos dados: Regressão Logística, o Support Vector Classifier com o kernel linear (o LinearSVC do sklearn), Árvores de Decisão (Decision Trees) e Florestas Aleatórias (Random Forests). Todos os modelos e otimização dos parâmetros foram feitos com o sklearn.
 
 # Como Rodar o Projeto
 
-Este projeto utiliza o Python, o Poetry como gerenciador de dependências e o GNU Make para gerenciar a pipeline do projeto. Portanto é necessário ter ambos instalados. Instruções para instalar o Poetry e o GNU Make podem ser encontradas em [https://python-poetry.org/docs/master/](https://python-poetry.org/docs/master/) e em [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/).
+Este projeto utiliza o Python, o Poetry como gerenciador de dependências e o GNU Make para gerenciar a pipeline do projeto. Portanto, é necessário ter ambos instalados. As instruções para instalar o Poetry e o GNU Make podem ser encontradas em [https://python-poetry.org/docs/master/](https://python-poetry.org/docs/master/) e em [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/).
 
-Com todos instalados, clone este repositório, e pela linha de comando instale as dependências com o poetry utilize o make:
+Com todos instalados, clone este repositório, e pela linha de comando instale as dependências com o Poetry e rode o make:
 
 ``` bash
 poetry install
