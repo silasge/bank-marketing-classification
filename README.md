@@ -18,14 +18,15 @@ Apliquei quatro modelos nos dados: Regressão Logística, o Support Vector Class
 
 # Como Rodar o Projeto
 
-Este projeto utiliza o Python, o Poetry como gerenciador de dependências e o GNU Make para gerenciar a pipeline do projeto. Portanto, é necessário ter ambos instalados. As instruções para instalar o Poetry e o GNU Make podem ser encontradas em [https://python-poetry.org/docs/master/](https://python-poetry.org/docs/master/) e em [https://www.gnu.org/software/make/](https://www.gnu.org/software/make/).
+O projeto precisa ter o Python instalado, além do [Poetry](https://python-poetry.org/docs/master/) e do [GNU Make](https://www.gnu.org/software/make/).
 
-Com todos instalados, clone este repositório, e pela linha de comando instale as dependências com o Poetry e rode o make:
+Com todos instalados, clone este repositório e rode o make com o seguinete comando:
 
 ``` bash
-poetry install
 make all
 ```
+
+Ao final ele dará a performance do melhor modelo no conjunto de teste entre todos os avaliados.
 
 Opcionalmente, é possível definir alguns parâmetros para o treinamento dos modelos:
 
