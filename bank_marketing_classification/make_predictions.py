@@ -51,13 +51,15 @@ def predict_on_test_set(test_set, best_model, threshold, save_to=None):
     roc_auc_test = metrics.roc_auc_score(bank_y_tt_pp, y_scores)
     recall_test = metrics.recall_score(bank_y_tt_pp, y_scores)
     precision_test = metrics.precision_score(bank_y_tt_pp, y_scores)
+    accuracy_test = metrics.accuracy_score(bank_y_tt_pp, y_scores)
 
     logger.info(
         f"Métricas do modelo {model_name} no conjunto de teste usando o threshold {threshold}:"
     )
     logger.info(f"ROC AUC: {roc_auc_test}")
+    logger.info(f"Precisão: {precision_test}")
     logger.info(f"Recall: {recall_test}")
-    logger.info(f"Precision: {precision_test}")
+    logger.info(f"Acurácia: {accuracy_test}")
 
     bank_test["y_preds"] = y_scores
 
